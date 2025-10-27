@@ -99,7 +99,8 @@ int main(int argc, char *argv[])
 
     // Messages received from clients (externals). 
     struct msg messageFromClient;   
-    
+
+    // Gets the initial temp for the server passed as an argument
     float centralTemp = atof(argv[1]);
 
     // Establish client connections and return 
@@ -130,7 +131,7 @@ int main(int argc, char *argv[])
 
         }
 
-        // Modify Temperature 
+        // Applies the given formula for updating the central temp 
         centralTemp = (2 * centralTemp) + currentTemps[0] + currentTemps[1] + currentTemps[2] + currentTemps[3];
         centralTemp = centralTemp / 6.0; 
 
@@ -149,17 +150,18 @@ int main(int argc, char *argv[])
 
         printf("\n");
 
-        // Check stability condition 
+        // Checks stability condition 
         if (isStable(currentTemps, prevTemps)){
             stable = true;
             printf("The system has stabilized. The final temperature is: %f\n", centralTemp);
         } else {
+            // Updates the previous temps array
             for (int i = 0;  i < numExternals; i++)
                 prevTemps[i] = currentTemps[i];
         }
     }
  
-    // Closing all sockets
+    // Sends a final broadcast to every client that the program is stable and closes all sockets
     for (int i = 0; i < numExternals; i++) {
         struct msg updated_msg;
         updated_msg.T = -1;
@@ -172,6 +174,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+// Function that determines stability by comparing each external temp to its previous value to evaluate their difference
 bool isStable(float array1[], float array2[]) {
     for (int i = 0;  i < numExternals; i++){
         if (fabs(array1[i] - array2[i]) > 0.001) {
