@@ -60,11 +60,13 @@ int main (int argc, char *argv[])
         return -1;
     }
 
+    // If the temperature sent is less than zero, then it is stable
     while (the_message.T >= 0) {
 
         printf("--------------------------------------------------------\n");
         printf("Updated temperature sent by the Central process = %f\n", the_message.T);
 
+        // Formula for updating the external temp
         initialTemperature = (2 * the_message.T + 3 * initialTemperature) / 5;
 
         // Package to the sent to server 
@@ -84,8 +86,7 @@ int main (int argc, char *argv[])
         
     }
     
-    
-    // Close the socket:
+    // Prints the final message once stabilized and closes the socket
     printf("\nThe temperature is stable.\nExternal Temp (%d): %f\n", externalIndex, initialTemperature);
     close(socket_desc);
     
