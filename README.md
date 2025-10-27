@@ -42,7 +42,8 @@ The test featured in the screenshots at the bottom utilized the following values
 ./client 4 50
 ```
 
+### Start of Execution
+![start_of_run](start.png)
 
-
-
-![sample_run](sample_run.jpg)
+### End of Execution
+![end_of_run](end.png)
